@@ -81,7 +81,7 @@ public class Task implements Runnable {
 			Random _r = new Random();
 			keys = new byte[KEY_AMOUNT][];
 			for (int _sigh = 0; _sigh < KEY_AMOUNT; _sigh++){
-				keys[_sigh] = new byte[akl + (KEY_AMOUNT - 1)];
+				keys[_sigh] = new byte[akl + (_sigh - (KEY_AMOUNT / 2))];
 				_r = new Random(_r.nextInt());
 				_r.nextBytes(keys[_sigh]);
 				keyOut.write(keys[_sigh]);
@@ -115,7 +115,7 @@ public class Task implements Runnable {
 			
 			keys = new byte[KEY_AMOUNT][];
 			for (int _sigh = 0; _sigh < KEY_AMOUNT; _sigh++){
-				keys[_sigh] = new byte[akl + (KEY_AMOUNT - 1)];
+				keys[_sigh] = new byte[akl + (_sigh - (KEY_AMOUNT / 2))];
 				keyIn.read(keys[_sigh]);
 			}
 			
