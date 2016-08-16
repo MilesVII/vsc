@@ -11,7 +11,7 @@ public class Task implements Runnable {
 	private byte[][] keys;
 	private int akl;
 	public final int BUFFER_SIZE;
-	public static final int DEFAULT_BUFFER_SIZE = 4096, MINIMUM_KEY_LENGTH = 512, KEY_STEP = 128, KEY_AMOUNT = 3;
+	public static final int DEFAULT_BUFFER_SIZE = 4096, MINIMUM_KEY_LENGTH = 512, KEY_STEP = 128, KEY_AMOUNT = 3/*Must be odd number, >2*/;
 	public enum Mode {ENC, DEC};
 
 	public Task(Mode _m, File _source, File _result, File _key, int _bufsize){
@@ -105,8 +105,8 @@ public class Task implements Runnable {
 	private void keyRestore(File _key){
 		try {
 			long __ = _key.length();
-			if (__ % 3 == 0)
-				akl = (int)(__ / 3);
+			if (__ % KEY_AMOUNT == 0)
+				akl = (int)(__ / KEY_AMOUNT);
 			else
 				throw new Exception("Wrong key!");
 			
