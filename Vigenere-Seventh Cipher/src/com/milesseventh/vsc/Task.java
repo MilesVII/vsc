@@ -67,10 +67,7 @@ public class Task implements Runnable {
 			_sum = 0;
 			for(byte[] _horse : keys)
 				_sum += _horse[(pony + (blockNum + 1) * BUFFER_SIZE) % _horse.length];
-			res_buf[pony] = (byte)(buf[pony] + (mode?1:-1) * _sum
-							/*(keys[0][(pony + (blockNum + 1) * BUFFER_SIZE) % (akl - 1)] + 
-							 keys[1][(pony + (blockNum + 1) * BUFFER_SIZE) % (akl)] + 
-							 keys[2][(pony + (blockNum + 1) * BUFFER_SIZE) % (akl + 1)])*/); 
+			res_buf[pony] = (byte)(buf[pony] + (mode?1:-1) * _sum); 
 		}
 		out.write(res_buf);
 	}
@@ -86,16 +83,6 @@ public class Task implements Runnable {
 				_r.nextBytes(keys[_sigh]);
 				keyOut.write(keys[_sigh]);
 			}
-			/*firstKey = new byte[akl - 1];
-			secondKey = new byte[akl];
-			thirdKey = new byte[akl + 1];
-			Random _r = new Random();
-			_r.nextBytes(firstKey);
-			_r.nextBytes(secondKey);
-			_r.nextBytes(thirdKey);
-			keyOut.write(firstKey);
-			keyOut.write(secondKey);
-			keyOut.write(thirdKey);*/
 			keyOut.close();
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -108,7 +95,7 @@ public class Task implements Runnable {
 			if (__ % KEY_AMOUNT == 0)
 				akl = (int)(__ / KEY_AMOUNT);
 			else
-				throw new Exception("Wrong key!");
+				Main.throwErr("Wrong key file length");
 			
 			FileInputStream keyIn = new FileInputStream(_key);
 			
@@ -119,13 +106,6 @@ public class Task implements Runnable {
 				keyIn.read(keys[_sigh]);
 			}
 			
-			
-			/*firstKey = new byte[akl - 1];
-			secondKey = new byte[akl];
-			thirdKey = new byte[akl + 1];
-			keyIn.read(firstKey);
-			keyIn.read(secondKey);
-			keyIn.read(thirdKey);*/
 			keyIn.close();
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -140,6 +120,6 @@ public class Task implements Runnable {
 	}
 	
 	private boolean aklCheck(long F, int L){
-		return (F < (long)(L*L*L-L));
+		return (F < (long)(Math.pow(L, KEY_AMOUNT)-L));
 	}
 }
