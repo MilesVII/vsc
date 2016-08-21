@@ -33,26 +33,26 @@ public class Main {
 			throwErr("Error: Source file Not Found");
 		}
 		
-		File resultFile = new File(unicorn.hasOption(OPTION_FILE_OUT)?unicorn.getOptionValue(OPTION_FILE_OUT):sourceFile.getPath() + ".enc");
-		checkNewFile(resultFile, opts);
+		File resultFile = new File(unicorn.hasOption(OPTION_FILE_OUT)?unicorn.getOptionValue(OPTION_FILE_OUT):sourceFile.getPath() + (unicorn.hasOption(OPTION_MODE_DEC)?".enc":".dec"));
+		checkNewFile(resultFile, unicorn.hasOption(OPTION_ALLOW_REWRITE));
 		resultFile.createNewFile();
-		File keyFile = new File(unicorn.hasOption(OPTION_FILE_KEY)?unicorn.getOptionValue(OPTION_FILE_KEY):sourceFile.getPath() + ".enc.key");
-		int _bufsize = (unicorn.hasOption(OPTION_BUFFER_SIZE)?Integer.parseInt(unicorn.getOptionValue(OPTION_BUFFER_SIZE)):Task.DEFAULT_BUFFER_SIZE);
+		File keyFile = new File(unicorn.hasOption(OPTION_FILE_KEY)?unicorn.getOptionValue(OPTION_FILE_KEY):sourceFile.getPath() + ".key");
 		if (unicorn.hasOption(OPTION_MODE_ENC)){
-			checkNewFile(keyFile, opts);
+			checkNewFile(keyFile, unicorn.hasOption(OPTION_ALLOW_REWRITE));
 		} else {
 			if (!keyFile.exists())
-				getHelp(opts);
+				throwErr("Error: Key file Not Found");
 		}
+		int _bufsize = (unicorn.hasOption(OPTION_BUFFER_SIZE)?Integer.parseInt(unicorn.getOptionValue(OPTION_BUFFER_SIZE)):Task.DEFAULT_BUFFER_SIZE);
 		Task task = new Task(unicorn.hasOption(OPTION_MODE_ENC)?Task.Mode.ENC:Task.Mode.DEC, sourceFile, resultFile, keyFile, _bufsize);
 		task.run();
 	}
 	
-	private static void checkNewFile(File _fluffytail, Options _opts) throws Exception{
-		if (_fluffytail.exists() || _opts.hasOption(OPTION_ALLOW_REWRITE))
-			_fluffytail.createNewFile();
-		else
+	private static void checkNewFile(File _fluffytail, boolean _r) throws Exception{
+		if (_fluffytail.exists() && !_r)
 			throwErr("Error: " + _fluffytail.getName() + " already exist. Use -r option to rewrite");
+		else
+			_fluffytail.createNewFile();
 	}
 	
 	public static void throwErr(String _mess){
