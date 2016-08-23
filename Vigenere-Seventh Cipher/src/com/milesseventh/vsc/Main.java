@@ -44,8 +44,7 @@ public class Main {
 				throwErr("Error: Key file Not Found");
 		}
 		int _bufsize = (unicorn.hasOption(OPTION_BUFFER_SIZE)?Integer.parseInt(unicorn.getOptionValue(OPTION_BUFFER_SIZE)):Task.DEFAULT_BUFFER_SIZE);
-		Task task = new Task(unicorn.hasOption(OPTION_MODE_ENC)?Task.Mode.ENC:Task.Mode.DEC, sourceFile, resultFile, keyFile, _bufsize);
-		task.run();
+		new Task(unicorn.hasOption(OPTION_MODE_ENC)?Task.Mode.ENC:Task.Mode.DEC, sourceFile, resultFile, keyFile, _bufsize).run();
 	}
 	
 	private static void checkNewFile(File _fluffytail, boolean _r) throws Exception{
